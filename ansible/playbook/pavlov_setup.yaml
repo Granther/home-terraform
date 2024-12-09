@@ -3,6 +3,70 @@
   hosts: server1
   become: yes
   tasks:
+    - name: Create pavlov Logs dir
+      become_user: steam
+      ansible.builtin.file:
+        path: /home/steam/pavlovserver/Pavlov/Saved/Logs
+        state: directory
+        mode: '0755'
+        owner: "steam"
+
+    - name: Create pavlov Config/LinuxServer dirs 
+      become_user: steam
+      ansible.builtin.file:
+        path: /home/steam/pavlovserver/Pavlov/Saved/Config/LinuxServer
+        state: directory
+        mode: '0755'
+        owner: "steam"
+
+    - name: Create pavlov maps dir
+      become_user: steam
+      ansible.builtin.file:
+        path: /home/steam/pavlovserver/Pavlov/Saved/maps
+        state: directory
+        mode: '0755'
+        owner: "steam"
+
+    - name: Copy Controller whitelist.txt to remote
+      become_user: steam
+      ansible.builtin.copy:
+        src: ../external/pavlov/whitelist.txt
+        dest: ~/pavlovserver/Pavlov/Saved/Config/whitelist.txt
+        owner: "steam"
+        mode: '0644'
+
+    - name: Copy Controller blacklist.txt to remote
+      become_user: steam
+      ansible.builtin.copy:
+        src: ../external/pavlov/blacklist.txt
+        dest: ~/pavlovserver/Pavlov/Saved/Config/blacklist.txt
+        owner: "steam"
+        mode: '0644'
+
+    - name: Copy Controller mods.txt to remote
+      become_user: steam
+      ansible.builtin.copy:
+        src: ../external/pavlov/mods.txt
+        dest: ~/pavlovserver/Pavlov/Saved/Config/mods.txt
+        owner: "steam"
+        mode: '0644'
+
+    - name: Copy Controller RconSettings.txt to remote
+      become_user: steam
+      ansible.builtin.copy:
+        src: ../external/pavlov/RconSettings.txt
+        dest: ~/pavlovserver/Pavlov/Saved/Config/RconSettings.txt
+        owner: "steam"
+        mode: '0644'
+
+    - name: Copy Controller Game.ini to remote
+      become_user: steam
+      ansible.builtin.copy:
+        src: ../external/pavlov/Game.ini
+        dest: ~/pavlovserver/Pavlov/Saved/Config/LinuxServer/Game.ini
+        owner: "steam"
+        mode: '0644'
+
     - name: Update apt cache and install pavlov dependencies
       apt:
         name: "{{ item }}"
@@ -14,6 +78,17 @@
         - nano
         - libc++-dev
         - unzip
+      
+    - name: Install ACL for Ansible
+      apt:
+        name: acl
+        update_cache: yes
+
+    - name: Stop and disable UFW
+      service:
+        name: "ufw"
+        enabled: no
+        state: stopped
 
     - name: Create steam user
       ansible.builtin.user:
@@ -40,7 +115,7 @@
       become_user: steam
       ansible.builtin.get_url:
         url: https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
-        dest: /home/steam/steamcmd_linux.tar.gz
+        dest: /home/steam/Steam/steamcmd_linux.tar.gz
         mode: '0644'
         owner: "steam"
         group: "steam"
@@ -64,7 +139,7 @@
         cmd: rm /usr/lib/x86_64-linux-gnu/libc++.so 
         removes: /usr/lib/x86_64-linux-gnu/libc++.so
     
-    - name: Fix libc
+    - name: Create symlink to object
       ansible.builtin.command:
         cmd: ln -s /usr/lib/x86_64-linux-gnu/libc++.so.1 /usr/lib/x86_64-linux-gnu/libc++.so
         creates: /usr/lib/x86_64-linux-gnu/libc++.so
@@ -79,3 +154,17 @@
       become_user: steam
       ansible.builtin.file:
         path: /home/steam/pavlovserver/Pavlov/Saved/Logs
+
+    - name: Copy Controller RconSettings.txt to remote
+      ansible.builtin.copy:
+        src: ../external/pavlov/RconSettings.txt
+        dest: ~/pavlovserver/Pavlov/Saved/Config/RconSettings.txt
+        owner: "steam"
+        mode: '0644'
+
+    - name: Copy Controller Game.ini to remote
+      ansible.builtin.copy:
+        src: ../external/pavlov/Game.ini
+        dest: ~/pavlovserver/Pavlov/Saved/Config/LinuxServer/Game.ini
+        owner: "steam"
+        mode: '0644'
