@@ -137,6 +137,16 @@
       sysctl:
         name: net.ipv4.ip_forward
         value: 1
+
+    - name: "Downloading kube packages"
+      command: sudo kubeadm config images pull
+
+    - name: "Create kube cluster"
+      command: sudo kubeadm init --apiserver-advertise-address=192.168.5.30 --pod-network-cidr=172.16.0.0/16
+
+    - name: "Allow non-sudo use of kubectl"
+      command: 
+    
     - name: Reboot
       reboot:
 

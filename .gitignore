@@ -1,1 +1,4 @@
 proxmox/proxmox.auto.tfvars
+ansible/.venv
+aws/.terraform
+proxmox/.terraform
