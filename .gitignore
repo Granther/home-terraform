@@ -2,3 +2,7 @@ proxmox/proxmox.auto.tfvars
 ansible/.venv
 aws/.terraform
 proxmox/.terraform
+
+*.tfstate
+*.tfvars
+*.tfstate.backup
