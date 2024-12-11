@@ -39,6 +39,20 @@ resource "aws_security_group" "pavlov_ingress" {
     cidr_blocks = ["0.0.0.0/0"] # Replace with specific IP/CIDR for better security
   }
 
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["104.1.220.133/32"] # Replace with specific IP/CIDR for better security
+  }
+
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "udp"
+    cidr_blocks = ["104.1.220.133/32"] # Replace with specific IP/CIDR for better security
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
