@@ -3,6 +3,7 @@ ansible/.venv
 aws/.terraform
 proxmox/.terraform
 pfsense/.terraform
+gransible
 
 *.tfstate
 *.tfvars
