@@ -31,7 +31,7 @@
     - name: Create steam user
       ansible.builtin.user:
         name: steam
-        password: "{{ steam_user_pass | password_hash('sha512') }}"
+        password: "{{ 'gonnaglorp1014' | password_hash('sha512') }}"
         shell: /bin/bash
         state: present
 
